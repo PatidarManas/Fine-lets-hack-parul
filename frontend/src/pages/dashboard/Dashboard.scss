@@ -1,0 +1,30 @@
+.dash{
+    display: grid;
+    grid-template-columns: auto 100%;
+    min-height: 100vh;
+    .menu{
+        min-height: 100vh;
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+        background-color: aliceblue;
+        gap: 50px;
+        padding: 5px 30px 0 20px;
+        .menu-btn{
+
+        }
+
+
+        .menu-options{
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            div{
+                border: 2px solid white;
+                border-radius: 5px;
+                font-size: 24px;
+                font-weight: 400;
+            }
+        }
+    }
+}

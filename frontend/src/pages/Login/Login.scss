@@ -1,0 +1,33 @@
+section{
+    overflow: hidden;
+    div{
+        div{
+            section{
+                #signup{
+                    div{
+                        div{
+                            form{
+                                display: flex;
+                                flex-direction: column;
+                                .text{
+                                    display: flex;
+                                    gap: 5px;
+                                    width: 100%;
+                                    input{
+                                        background-color: grey;
+                                        width: 50%;
+                                        
+                                    }
+                                }
+                                .resulttext1{
+                                    display: flex;
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
