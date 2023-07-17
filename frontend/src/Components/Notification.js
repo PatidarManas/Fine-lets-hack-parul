@@ -5,17 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { Uploader } from "uploader";
 import { UploadButton } from "react-uploader";
 const Notification = ({notification,index}) => {
-    // const URL="https://refine-backend-z49l.onrender.com"
-    const URL="http://localhost:4000"
+    console.log(notification)
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     const history = useNavigate()
     const [request,setrequest]=useState();
     async function getdetails(){
-        if(notification[2][0]=="A" && notification[2][1]=="L"){
 
             try {
-                await axios.post(`${URL}transaction/getdetails`,{
-                    id:notification[2]
+                await axios.post(`${URL}/transaction/getdetails`,{
+                    id:notification[2],notification
                 }).then((res)=>{
+                    console.log(res.data)
                     setrequest(res.data)
                 }).catch((error)=>{
                     alert(error)
@@ -25,21 +26,37 @@ const Notification = ({notification,index}) => {
                 
             }
         }
-        }
+        
     getdetails();
     useEffect(() => {
      
     }, [request])
     async function accepthandler(){
         try {
-            await axios.post(`${URL}/transaction/acceptloan`,{
-                token:notification[2]
-            }).then((res)=>{
-                alert("success")
-                history("../dashboard")
-            }).catch((error)=>{
-                alert(error)
-            })
+            const token = document.cookie
+            console.log(notification[2])
+            if(notification[2][0]=="A" && notification[2][1]=="L"){
+
+                await axios.post(`${URL}/transaction/acceptloan`,{
+                    altoken:notification[2],token
+                }).then((res)=>{
+                    alert("success")
+                    history("../dashboard")
+                }).catch((error)=>{
+                    alert(error)
+                })
+            }
+            else{
+                await axios.post(`${URL}/transaction/acceptfund`,{
+                    altoken:notification[2],token
+                }).then((res)=>{
+                    alert("success")
+                    history("../dashboard")
+                }).catch((error)=>{
+                    alert(error)
+                })
+
+            }
         } catch (error) {
             alert(error)
         }
@@ -75,7 +92,7 @@ const Notification = ({notification,index}) => {
         </div>
         <div className='self-end'>
 
-        <button id={"b4"} className=' text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium mt-5 text-lg px-5 py-2 mr-0 mb-2  focus:outline-none ' onClick={accepthandler}>Accept</button>
+        <button id={"b4"} className=' text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium mt-5 text-lg px-5 py-2 mr-0 mb-2  focus:outline-none ' onClick={()=>{accepthandler()}}>Accept</button>
         <button id={"b4"} className='text-white   bg-gray-500 hover:bg-gray-700 focus:ring-4 focus:ring-blue-300 font-medium mt-5 text-lg px-5 py-2 mr-0 mb-2  focus:outline-none '>Decline</button>
         </div>
 

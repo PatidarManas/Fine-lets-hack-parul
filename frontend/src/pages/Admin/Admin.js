@@ -3,20 +3,25 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import logo from "../../Group 1.png"
 const Admin = () => {
-    // const URL="https://refine-backend-z49l.onrender.com"
-    const URL = "http://localhost:4000"
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     const [auths, setauths] = useState()
     const [length, setlength] = useState(0)
     const [total, settotal] = useState(0)
     const [totalusers, settotalusers] = useState(0)
+    // admin();
     async function admin() {
         try {
-            await axios.post("http://localhost:4000/admin/allauthreq").then((res) => {
+            await axios.post(`${URL}/admin/allauthreq`)
+            .then((res) => {
+                console.log("rind")
                 setauths(res.data)
                 setlength(auths.authreqs.length )
                 settotal(auths.total)
                 settotalusers(auths.totalusers)
+                console.log(total)
             }).catch((error) => {
                 toast.error(error)
             })
@@ -26,12 +31,12 @@ const Admin = () => {
         }
     }
 
-    admin()
+    admin();
     useEffect(() => {
-
         
-         
-    }, [length,auths])
+        
+    }, [setauths])
+    console.log(totalusers)
 
     async function accepthandler(id, of) {
         try {
@@ -86,7 +91,7 @@ const Admin = () => {
                                 <span class="sr-only">Toggle sidebar</span>
                             </button>
                             <a href="https://flowbite.com" class="flex items-center justify-between mr-4">
-                                <img src="/images/MyLogo3.png" class="mr-3 h-10" alt="Flowbite Logo" />
+                                <img src={logo} class="mr-3 h-11" alt="Flowbite Logo" />
                                 <span class="self-center text-2xl font-semibold whitespace-nowrap text-white"></span>
                             </a>
 
@@ -405,7 +410,7 @@ const Admin = () => {
                     <section class=" bg-gray-900 p-3 sm:p-5">
                         <div class="mx-auto max-w-screen-xl">
                             <div class=" bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
-                                <div className='text-white p-2 px-4 font-medium text-xl'>Requests for authentication</div>
+                                <div className='text-white p-2 px-4 font-medium text-xl'>Requests for Verification</div>
                                 <div class="overflow-x-auto">
                                     <table class="w-full text-sm text-left  text-gray-400">
                                         <thead

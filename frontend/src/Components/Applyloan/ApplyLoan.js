@@ -5,8 +5,8 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 const ApplyLoan = ({ transaction }) => {
-    // const URL="https://refine-backend-z49l.onrender.com"
-    const URL="http://localhost:4000"
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     console.log(transaction)
     const [user, setuser] = useState();
     const [why, setwhy] = useState("")
@@ -73,7 +73,11 @@ const ApplyLoan = ({ transaction }) => {
     return (
 
         <div className='flex flex-col bg-white rounded-lg min-w-full p-6 gap-1 static mt-6 '>
-            <div className='flex items-center text-2xl	font-medium	 gap-1 mb-2'><img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" />
+            <div className='flex items-center text-2xl	font-medium	 gap-1 mb-2'>
+            {user ? user.isAuthorized ? 
+                                <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> :
+                                <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
+                           :"" }
                 {/* <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" /> */}
                 {user ? user.name : ""}</div>
             <div className='text-xl text-slate-500	'>Rs {transaction.amount} at {transaction.interest_Rate}% for {transaction.time} years</div>

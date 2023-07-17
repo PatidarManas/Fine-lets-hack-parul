@@ -7,14 +7,38 @@ import { PL } from "../Models/PL.js";
 import { User } from "../Models/User.js"
 import { application } from "../Models/application.js"
 import cloudinary from "cloudinary"
-// import nodemailer from "nodemailer"
-// var transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//       user: "manaspatidar170@gmail.com",
-//       pass: "bljohfycwxzwhick"
-//     }
-//   });
+import nodemailer from "nodemailer"
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: "mmbhk.fine@gmail.com",
+      pass: "roaitiaekjxmxdfi"
+    }
+  });
+
+  export const test =async(req,res)=>{
+    try {
+        var mailOptions = {
+            from: 'mmbhk.fine@gmail.com',
+            to: `baljitsingh692002@gmail.com`,
+            subject: 'Here is your contact details',
+            text: `Hey baljit 
+            We are very happy to tell you that your request for loan has done all the formalities and now you can contact Provider   
+            Here is the Provider contact details
+            
+    
+            Note: The further Loan process should be caried out by you and the provider itself, Fine will not be responsible for and Problems caused in further process`
+        };
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+             console.log(error)
+            } 
+          });
+          res.status(200).json("done" )
+    } catch (error) {
+        res.status(400).json(error )
+    }
+  }
 export const createAF = async (req, res) => {
     try {
         const k = await application.findById("64ad9f0f3f9ccbdf739b90ce");
@@ -67,10 +91,13 @@ export const createPF = async (req, res) => {
         })
         await User.findByIdAndUpdate(req.body.user._id, {
             $push: { transactions: token },
-            $push: { notifications:["Your request to get connected to investors in your Startup/Buisness Just got a new Response" , "Active",token] }
         })
-        await AF.findOneAndUpdate({ token: req.body.to }, {
+        const af = await AF.findOneAndUpdate({ token: req.body.to }, {
             $push: { transactions: req.body.user._id }
+        })
+        await User.findByIdAndUpdate(af.from,{
+            $push: { notifications:["Your request to get connected to investors in your Startup/Buisness Just got a new Response" , "Active",token] }
+
         })
         console.log("a")
         res.status(200).json(pf)
@@ -174,45 +201,86 @@ export const History = async (req, res) => {
 
     }
 }
-
+export const acceptfund=async(req,res)=>{
+    try {
+        const user = await PF.findOneAndUpdate({token:req.body.altoken},{
+            status:"Accepted"
+        })
+        
+        const user2 = await User.findByIdAndUpdate(user.from,{
+            $push:{notifications:["your request to invest in startup just got accepted check out mail for further information","Active",req.body.token]}
+        })
+        var mailOptions = {
+            from: 'mmbhk.fine@gmail.com',
+            to: `${user2.email}`,
+            subject: 'Here is your contact details',
+            text: `Hey ${user2.name} 
+            We are very happy to tell you that your request for Getting as a partner in company has done all the formalities and now you can contact The startup team   
+            Here is the Provider contact details
+            Name: ${req.body.user.name}
+            Contact no.: ${req.body.user.mobile}
+            Email-id : ${req.body.user.email}
+    
+            Note: The further investment process should be caried out by you and the startup team itself, Fine will not be responsible for and Problems caused in further process`
+        };
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+             alert(error)
+            } 
+          });
+        res.status(200).json("success")
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
 export const getdetails= async(req,res)=>{
     try {
-        const transaction = await AL.findOne({token:req.body.id})
-        const {name,isAuthorized} = await User.findById(transaction.from)
-        
-        res.status(200).json({transaction , name ,isAuthorized})
+        if(req.body.notification[2][0]=="A" && req.body.notification[2][1]=="L"){
+
+            const transaction = await AL.findOne({token:req.body.id})
+            const {name,isAuthorized} = await User.findById(transaction.from)
+            
+            res.status(200).json({transaction , name ,isAuthorized})
+        }
+        else if(req.body.notification[2][0]=="P" && req.body.notification[2][1]=="F"){
+            const transaction = await PF.findOne({token:req.body.id})
+            const {name,isAuthorized} = await User.findById(transaction.from)
+            
+            res.status(200).json({transaction , name ,isAuthorized})
+        }
     } catch (error) {
         res.status(400).json(error)
     }
 }
 
 export const acceptloan = async(req,res)=>{
+    console.log(req.body.altoken)
 try {
-    const user = await AL.findOneAndUpdate({token:req.body.token},{
+    const user = await AL.findOneAndUpdate({token:req.body.altoken},{
         status:"Accepted"
     })
-    // const user1= await 
+    
     const user2 = await User.findByIdAndUpdate(user.from,{
         $push:{notifications:["your request for loan just got accepted check out mail for further information","Active",req.body.token]}
     })
-    // var mailOptions = {
-    //     from: 'manaspatidar170@gmail.com',
-    //     to: `${user2.email}`,
-    //     subject: 'Here is your contact details',
-    //     text: `Hey ${user2.name} 
-    //     We are very happy to tell you that your request for loan has done all the formalities and now you can contact Provider   
-    //     Here is the Provider contact details
-    //     Name: ${user.name}
-    //     Contact no.: ${user.mobile}
-    //     Email-id : ${user.email}
+    var mailOptions = {
+        from: 'mmbhk.fine@gmail.com',
+        to: `${user2.email}`,
+        subject: 'Here is your contact details',
+        text: `Hey ${user2.name} 
+        We are very happy to tell you that your request for loan has done all the formalities and now you can contact Provider   
+        Here is the Provider contact details
+        Name: ${req.body.user.name}
+        Contact no.: ${req.body.user.mobile}
+        Email-id : ${req.body.user.email}
 
-    //     Note: The further Loan process should be caried out by you and the provider itself, Fine will not be responsible for and Problems caused in further process`
-    // };
-    //   transporter.sendMail(mailOptions, function(error, info){
-    //     if (error) {
-    //      alert(error)
-    //     } 
-    //   });
+        Note: The further Loan process should be caried out by you and the provider itself, Fine will not be responsible for and Problems caused in further process`
+    };
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+         alert(error)
+        } 
+      });
     res.status(200).json("success")
 } catch (error) {
     res.status(400).json(error)

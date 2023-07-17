@@ -5,7 +5,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  import {AiFillQuestionCircle} from "react-icons/ai";
+  import {MdVerified} from "react-icons/md"
+  import logo from "../../LogoSVG (1).svg"
 const Pl = ({user}) => {
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     const history = useNavigate()
     
     const [question, setquestion] = useState("");
@@ -39,9 +44,10 @@ const Pl = ({user}) => {
             document.getElementById("details").classList.add("outline-red-500")
         }
         else{
+            const token = document.cookie
             try {
-                await axios.post("http://localhost:4000/transaction/pl",{
-                    from:"64ac2c22fc2880e786f6cc20",amount,time,interest,details,questions
+                await axios.post(`${URL}/transaction/pl`,{
+                    amount,time,interest,details,questions,token
                 }).then((res)=>{
                     document.getElementById("success").style.display="block"
                     document.getElementById("form").style.display="none"
@@ -69,6 +75,12 @@ const Pl = ({user}) => {
     }
     function allclearhandler() {
         setquestions([]);
+        document.getElementById("sqc1").checked=false
+        document.getElementById("sqc2").checked=false
+        document.getElementById("sqc3").checked=false
+        document.getElementById("sq1").style.display="block";
+        document.getElementById("sq2").style.display="block";
+        document.getElementById("sq3").style.display="block";
     }
     return (
         <div className=" bg-blue-100 min-h-screen p-0 m-0" >
@@ -90,17 +102,16 @@ const Pl = ({user}) => {
                             </button>
                             {/* Logo */}
                             <a href className="flex items-center justify-between mr-4">
-                                <img src className="mr-3 h-8" alt=" Logo" />
-                                <span className="self-center text-2xl font-semibold whitespace-nowrap ">Fine</span>
-                            </a>
+                                <img src={logo} className="mr-3 h-10" alt=" Logo" />
+                              </a>
                         </div>
                     </div>
                 </nav>
                 {/* Sidebar */}
                 <aside className="fixed top-0 left-0 z-40 w-64 rounded-lg mt-24 ml-5 mb-5 pt-4 pb-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 " id="drawer-navigation">
                     <div className="overflow-y-auto py-2 px-3 bg-white flex flex-col justify-between " style={{ height: "81vh" }} >
-                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200">
-                        <span>{user.isAuthenticated ? 
+                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200" title={user.isAuthorized ? "Verified Account" : "Unverified Account"}>
+                        <span>{user.isAuthorized ? 
                                 <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> :
                                 <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
                             }
@@ -161,12 +172,9 @@ const Pl = ({user}) => {
                                 </li>
                                 <li>
                                     <a href="../auth" className="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 ">
-                                        <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                                            <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-                                        </svg>
-                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Authentication</span>
-                                    </a>
+                                       
+                                        <MdVerified className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor"  size={15} />
+                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Get Verified</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -206,41 +214,62 @@ const Pl = ({user}) => {
 
                                         <div class="lg:col-span-2">
                                             <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                                                <div class="md:col-span-2">
-                                                    <label for="amount">Amount</label>
+                                                <div class="md:col-span-2 text-xl font-normal">
+                                                    <label for="amount ">Amount</label>
                                                     <input type="number" onChange={(e)=>setamount(e.target.value)} min={100000} max={10000000} name="amount" id="amount" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50 " placeholder="" />
                                                 </div>
-                                                <div class="md:col-span-2">
+                                                <div class="md:col-span-2 text-xl font-normal">
                                                     <label for="interest">Interest Rate(Yearly)</label>
                                                     <input type="number" onChange={(e)=>setinterest(e.target.value)} min={0} max={40} name="interest" id="interest" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" />
                                                 </div>
-                                                <div class="md:col-span-2">
+                                                <div class="md:col-span-2 text-xl font-normal">
                                                     <label for="time">Time-Period(in Years)</label>
                                                     <input type="number"  onChange={(e)=>settime(e.target.value)} min={0} max={50} name="time" id="time" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" placeholder="" />
                                                 </div>
                                                 <div class="md:col-span-5">
 
-                                                    <label for="message" class="block mb-1  text-gray-900 ">Discription </label>
+                                                    <label for="message" class="block mb-1  text-gray-900 text-xl font-normal ">Discription </label>
                                                     <label for="message" class="block mb-2 leading-3 text-sm font-medium text-stone-500 ">Write all the criterias and information you want to let your loan applier know before they proceed</label>
                                                     <textarea id="details" rows="4"  onChange={(e)=>setdetails(e.target.value)} class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 " placeholder="Write your thoughts here..."></textarea>
                                                 </div>
-                                                <div className='md:col-span-5 '>
+                                                <div className='md:col-span-5 bg-gray-100  p-3 rounded-md '>
                                                     <div className='flex justify-between align-center'>
                                                         <div>
 
-                                                            <label for="message" class=" flex justify-between block mb-0 mt-3  text-gray-900 w-4/5 ">Add Questions
+                                                            <label for="message" class=" flex justify-between block mb-0.5 mt-3 text-xl font-normal text-gray-900 w-4/5 ">Add Questions
                                                             </label>
                                                             <label for="message" class="block mb-2 leading-3 text-sm font-medium text-stone-500 ">Add Questions you want to ask out to your loan applier</label>
                                                         </div>
+                                                        
                                                     {questions.length > "0" ? <button className='self-center bg-red-500 h-10 hover:bg-red-700 text-white text-lg font-normal py-1 px-1 rounded-lg' onClick={allclearhandler}>Clear All</button>
                                                         : ""}
                                                     </div>
                                                     <div className='flex mb-3 flex-col'>
 
                                                         {questions.map((value) => {
-                                                            return <div className=' flex text-lg align-center justify-between px-2 py-0  w-full '>* {value} </div>
+                                                            return <div className=' flex text-lg align-center  px-2 py-0  w-full gap-2 '><AiFillQuestionCircle className='self-center'/> {value} </div>
                                                         })}
                                                     </div>
+                                                    <div className='flex flex-col gap-2 '>
+                                                            <div className='text-lg font-medium'>Suggested questions</div>
+                                                            <div className='flex gap-2' id='sq1'><input id='sqc1' type='checkbox' class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={()=>{
+                                                                document.getElementById("sq1").style.display="none";
+                                                                setquestions([...questions, "What is your Monthly Income"]);
+                                                            }} ></input>What is your Monthly Income</div>
+                                                            <div className='flex gap-2' id='sq2'><input id='sqc2' type='checkbox' class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={()=>{
+                                                                document.getElementById("sq2").style.display="none";
+                                                                setquestions([...questions, "Why do you need loan"]);
+                                                            }} ></input>Why do you need loan</div>
+                                                            <div className='flex gap-2 ' id='sq3'><input id='sqc3' type='checkbox' class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={()=>{
+                                                                document.getElementById("sq3").style.display="none";
+                                                                setquestions([...questions, "Have you any pending loans with others"]);
+                                                            }} ></input>Have you any pending loans with others</div>
+                                                            {/* <div className='flex gap-2' id='sq4'><input type='checkbox' class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={()=>{
+                                                                document.getElementById("sq4").style.display="none";
+                                                                setquestions([...questions, "Have you any pending loans with others"]);
+                                                            }} ></input>Have you any pending loans with others</div> */}
+                                                        </div>
+                                                            <div className='text-lg font-medium my-2'>Other questions</div>
                                                     <div className='flex '>
                                                         <input type="text" onChange={(e) => { setquestion(e.target.value) }} name="questions" id="question" placeholder="i.e. What is Monthly savings" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />
                                                         <button className='bg-green-600 hover:bg-green-700 text-white text-xl font-semibold py-2 px-4 rounded-l-lg ml-2' onClick={addhandler}>Add</button>

@@ -20,9 +20,11 @@ function App(isadmin=false) {
     getuser();
   },[])
   async function getuser() {
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     const token = document.cookie
     try {
-        await axios.post("http://localhost:4000/auth/islogin", {
+        await axios.post(`${URL}/auth/islogin`, {
             token
         }).then((res) => {
           const {success,newuser} = res.data
@@ -58,7 +60,7 @@ function App(isadmin=false) {
       <Route path={"/af"} element={user=="loading" ? <>Loading</> : user!=="not" ? <Af user={user} /> : <Login/>} />
       {/* <Route path={"/af"} element={<Af/>} /> */}
       <Route path={"/"} element={<Landing/>} />
-      <Route path={"/admin"} element={isadmin ? <Admin/> : <Dashboard/>} />
+      <Route path={"/admin"} element={ <Admin/>} />
 
     </Routes>
   </Router>

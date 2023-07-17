@@ -4,8 +4,8 @@ import axios from "axios"
 import { Uploader } from "uploader";
 import { UploadButton } from "react-uploader";
 const Fund = ({ funder, index }) => {
-    // const URL="https://refine-backend-z49l.onrender.com"
-    const URL="http://localhost:4000"
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     // console.log(funder)
     const [why,setwhy]= useState()
         function openbox(value) {
@@ -59,7 +59,8 @@ const Fund = ({ funder, index }) => {
             const a = document.getElementById("ans" + index).value;
             answers.push([question,a])
         })
-        console.log(answers)
+        // console.log(answers)
+        
         await axios.post(`${URL}/transaction/pf`,{
             token,to:funder.token,answers
         }).then((res)=>{
@@ -81,18 +82,20 @@ const Fund = ({ funder, index }) => {
 
     useEffect(() => {
       
-        // getdetails();
-    }, [c])
-    
+        getdetails();
+    }, [])
+    console.log(request)
 
     return (
 
 
 
         <div className='flex flex-col bg-white rounded-lg min-w-full p-6 gap-1 static mt-6 '>
-            <div className='flex items-center text-2xl	font-medium	 gap-1 mb-2'><img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" />
-                {/* <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" /> */}
-                {request ? request.name : ""}</div>
+            <div className='flex items-center text-2xl	font-medium	 gap-1 mb-2'>
+            {request ? request.isAuthorized ? 
+                                <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> :
+                                <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
+                           :"" }{request ? request.name : ""}</div>
             <div className='text-xl text-slate-500	'>{funder.name}</div>
             <div className='text-xl text-slate-500 flex  align-center	'>{funder.category} <FaLocationDot className='ml-8' />{funder.location}</div>
             <div className='text-xl text-slate-500	'>Ask for Rs {funder.fund} in exchange of {funder.percentage}% of Company</div>

@@ -4,11 +4,14 @@ import { Uploader } from "uploader";
 import { UploadButton } from "react-uploader";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { MdVerified } from "react-icons/md"
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
-const Authentication = ({user}) => {
-    // const URL="https://refine-backend-z49l.onrender.com"
-    const URL="http://localhost:4000"
+import 'react-toastify/dist/ReactToastify.css';
+import logo from "../../LogoSVG (1).svg"
+import img from "../../6567338.jpg"
+const Authentication = ({ user }) => {
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     const [file, setfile] = useState("")
     const history = useNavigate()
     const uploader = Uploader({ apiKey: "public_12a1yRKF31EEVAGBwEr4qUJbuSbH" });
@@ -22,25 +25,25 @@ const Authentication = ({user}) => {
             document.getElementById("pay").style.display = "block"
         }
     }
-    async function logouthandler(){
-        document.cookie =  "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    async function logouthandler() {
+        document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
         history("../")
     }
     async function payed() {
         try {
             const token = document.cookie
-            await axios.post(`${URL}/admin/authreq`,{
-                file,token
-            }).then((res)=>{
-                
+            await axios.post(`${URL}/admin/authreq`, {
+                file, token
+            }).then((res) => {
+
                 document.getElementById("pay").style.display = "none"
                 document.getElementById("success").style.display = "block"
-            }).catch((error)=>{
+            }).catch((error) => {
                 alert(error)
             })
         } catch (error) {
             alert(error)
-            
+
         }
 
 
@@ -65,8 +68,7 @@ const Authentication = ({user}) => {
                             </button>
                             {/* Logo */}
                             <a href className="flex items-center justify-between mr-4">
-                                <img src className="mr-3 h-8" alt=" Logo" />
-                                <span className="self-center text-2xl font-semibold whitespace-nowrap ">Fine</span>
+                                <img src={logo} className="mr-3 h-10" alt=" Logo" />
                             </a>
                         </div>
                     </div>
@@ -74,8 +76,8 @@ const Authentication = ({user}) => {
                 {/* Sidebar */}
                 <aside className="fixed top-0 left-0 z-40 w-64 rounded-lg mt-24 ml-5 mb-5 pt-4 pb-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 " id="drawer-navigation">
                     <div className="overflow-y-auto py-2 px-3 bg-white flex flex-col justify-between " style={{ height: "81vh" }} >
-                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200">
-                        <span>{user.isAuthenticated ? 
+                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200" title={user.isAuthorized ? "Verified Account" : "Unverified Account"}>
+                            <span>{user.isAuthorized ?
                                 <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> :
                                 <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
                             }
@@ -134,14 +136,9 @@ const Authentication = ({user}) => {
                                 </li>
                                 <li className='bg-gray-200 rounded-lg'>
                                     <a href="" className="flex items-center p-2 text-base font-medium text-gray-400 rounded-lg  ">
-                                        <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z">
-                                            </path>
-                                            <path d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z">
-                                            </path>
-                                        </svg>
-                                        <span className="flex-1 ml-3 whitespace-nowrap">Authentication</span>
-                                    </a>
+
+                                        <MdVerified className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" size={15} />
+                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Get Verified</span></a>
                                 </li>
                             </ul>
                         </div>
@@ -163,8 +160,8 @@ const Authentication = ({user}) => {
                         <div class="container  max-w-screen-lg mx-auto">
                             <div>
                                 <div className='bg-white rounded-lg shadow-lg py-2 px-4 md:p-4 mb-6'>
-                                    <h2 class="font-semibold text-2xl text-gray-600 text-center">Get Authenticated</h2>
-                                    <p class="text-gray-500 mb-6 text-center">Upload Your Goverment id Proof and Pay Authentication fees</p>
+                                    <h2 class="font-semibold text-2xl text-gray-600 text-center">Get Verified</h2>
+                                    <p class="text-gray-500 mb-6 text-center">Upload Your Goverment id Proof and Pay Verification fees</p>
                                 </div>
                                 <div id='success' class='hidden bg-white rounded-lg shadow-lg py-2 px-4 md:p-4 mb-6'>
                                     <h2 class="font-semibold text-3xl text-green-600 text-center">Success !! </h2>
@@ -172,7 +169,7 @@ const Authentication = ({user}) => {
                                     <p class="text-gray-500 mb-6 text-center">You will be furthur inform about process on your email and home page.</p>
                                 </div>
 
-                                <div id='form' class="bg-white  rounded-lg shadow-lg p-4 px-4 md:p-8 mb-6 ">
+                                <div id='form' class="hidden bg-white  rounded-lg shadow-lg p-4 px-4 md:p-8 mb-6 ">
                                     <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
                                         <div class="text-gray-600">
                                             <p class="font-medium text-lg">Personal Details</p>
@@ -226,7 +223,67 @@ const Authentication = ({user}) => {
                                         class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">Pay
                                         now</button>
                                 </div>
+                                <div id='premium' class="w-full  p-2 bg-white border border-gray-200 rounded-lg mx-auto shadow flex flex-col ">
+                                    <div class=" p-6 bg-white border border-gray-200 rounded-lg shadow mx-auto">
+                                        <div class="flex items-start">
+                                            <div>
+                                                <h1 class="mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900  ">
+                                                    Premium subscribers with a <span class="text-green-600 ">verified </span>
+                                                     account will get a green checkmark once approved...
+                                                </h1>
+                                                <h2 class="mb-2 text-lg font-semibold text-gray-900 ">
+                                                    Premium benefits:</h2>
 
+                                                <ul class="max-w-md space-y-1 text-gray-500 list-inside mb-4">
+                                                    <li class="flex items-center">
+                                                        <svg class="w-3.5 h-3.5 mr-2 text-green-500  flex-shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path
+                                                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                        </svg>
+                                                        Trust and Credibility
+                                                    </li>
+                                                    <li class="flex items-center">
+                                                        <svg class="w-3.5 h-3.5 mr-2 text-green-500  flex-shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path
+                                                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                        </svg>
+                                                        Enhanced Security
+                                                    </li>
+                                                    <li class="flex items-center">
+                                                        <svg class="w-3.5 h-3.5 mr-2 text-green-500  flex-shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path
+                                                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                        </svg>
+                                                        Reduced Risk
+                                                    </li>
+                                                </ul>
+
+
+
+
+
+                                                <a href="#" onClick={()=>{
+                                                    document.getElementById("form").style.display="block"
+                                                    document.getElementById("premium").style.display="none"
+                                                }}
+                                                    class="inline-flex mt-4 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 ">
+                                                    Continue
+                                                    <svg class="w-3.5 h-3.5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                                    </svg>
+                                                </a>
+
+                                            </div>
+                                            <div class="">
+                                                <img src={img} alt="" class="" style={{ width: " 708px" }} />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
 
                             </div>
                         </div>

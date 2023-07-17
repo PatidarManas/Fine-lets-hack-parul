@@ -13,6 +13,7 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  quesans:[],
   status: {
     type: String,
     required: true,

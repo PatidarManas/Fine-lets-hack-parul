@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import "./Dashboard.scss"
 import axios from "axios"
+
+import img from "../../6567338.jpg"
 import { Slider } from '@mui/material';
 import ApplyLoan from '../../Components/Applyloan/ApplyLoan';
 import Notification from '../../Components/Notification';
 import { useNavigate } from 'react-router-dom';
+import { MdVerified } from "react-icons/md"
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
-const Dashboard = ({userdetails}) => {
+import 'react-toastify/dist/ReactToastify.css';
+import logo from "../../LogoSVG (1).svg"
+const Dashboard = ({ userdetails }) => {
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     console.log(userdetails)
     const history = useNavigate()
     const [transactions, settransactions] = useState([])
@@ -67,8 +73,8 @@ const Dashboard = ({userdetails}) => {
             value: 100,
         },
     ];
-    async function logouthandler(){
-        document.cookie =  "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    async function logouthandler() {
+        document.cookie = "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
         history("../")
     }
     const [timeval, settimeVal] = useState([0, 50]);
@@ -79,7 +85,7 @@ const Dashboard = ({userdetails}) => {
         const token = document.cookie;
         console.log(token)
         try {
-            await axios.post("http://localhost:4000/auth/islogin", {
+            await axios.post(`${URL}/auth/islogin`, {
                 token
             }).then((res) => {
                 console.log(res.data)
@@ -91,10 +97,10 @@ const Dashboard = ({userdetails}) => {
         } catch (error) {
             alert(error)
         }
-    }   
-    function notificationshow(index){
+    }
+    function notificationshow(index) {
         // console.log(index)
-        document.getElementById("N"+index).style.display="block"
+        document.getElementById("N" + index).style.display = "block"
     }
     useEffect(() => {
 
@@ -122,8 +128,7 @@ const Dashboard = ({userdetails}) => {
                             </button>
                             {/* Logo */}
                             <a href className="flex items-center justify-between mr-4">
-                                <img src className="mr-3 h-8" alt=" Logo" />
-                                <span className="self-center text-2xl font-semibold whitespace-nowrap ">Fine</span>
+                                <img src={logo} className="mr-3 h-10" alt=" Logo" />
                             </a>
                         </div>
                     </div>
@@ -131,16 +136,16 @@ const Dashboard = ({userdetails}) => {
                 {/* Sidebar */}
                 <aside className="fixed top-0 left-0 z-40 w-64 rounded-lg mt-24 ml-5 mb-5 pt-4 pb-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 " id="drawer-navigation">
                     <div className="overflow-y-auto py-2 px-3 bg-white flex flex-col justify-between " style={{ height: "81vh" }} >
-                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200">
-                            <span className="flex mx-3 text-sm  rounded-full md:mr-0  "> 
-                            {userdetails.isAuthenticated ? (
+                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200" title={userdetails.isAuthorized ? "Verified Account" : "Unverified Account"}>
+                            <span className="flex mx-3 text-sm  rounded-full md:mr-0  " >
+                                {userdetails.isAuthorized ? (
 
-                                <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> 
-                            )
-                               : <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
-                            }
+                                    <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" />
+                                )
+                                    : <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
+                                }
                             </span>
-                            <p className="pl-1 text-base font-medium text-gray-900">{userdetails.name}
+                            <p className="pl-1 text-base font-medium text-gray-900" >{userdetails.name}
                             </p>
                             {/* <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 64 64" class="h-8 w-8 fill-green-600">
                                 <path d="M32,6C17.641,6,6,17.641,6,32c0,14.359,11.641,26,26,26s26-11.641,26-26C58,17.641,46.359,6,32,6z M45.121,28.121l-13,13 C31.535,41.707,30.768,42,30,42s-1.535-0.293-2.121-0.879l-8-8c-1.172-1.171-1.172-3.071,0-4.242c1.172-1.172,3.07-1.172,4.242,0 L30,34.758l10.879-10.879c1.172-1.172,3.07-1.172,4.242,0C46.293,25.05,46.293,26.95,45.121,28.121z"></path>
@@ -196,19 +201,16 @@ const Dashboard = ({userdetails}) => {
                                 </li>
                                 <li>
                                     <a href="../auth" className="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 ">
-                                        <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                                            <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-                                        </svg>
-                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Authentication</span>
-                                    </a>
+
+                                        <MdVerified className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" size={15} />
+                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Get Verified</span>  </a>
                                 </li>
                             </ul>
                         </div>
                         <div className=" ">
                             <hr className="h-px my-8 bg-gray-600 border-0 " />
                             <div className="flex flex-col items-center">
-                                <button  onClick={()=>{logouthandler()}} className=" text-3xl font-bold font-sans text-red-600   px-2 ">
+                                <button onClick={() => { logouthandler() }} className=" text-3xl font-bold font-sans text-red-600   px-2 ">
                                     <img className="w-8 h-8 inline" src="https://img.icons8.com/fluency-systems-filled/48/exit.png" alt="exit" />
                                     Log Out
                                 </button>
@@ -222,6 +224,76 @@ const Dashboard = ({userdetails}) => {
                         <h2 class="font-semibold text-2xl text-gray-600 text-center">Home</h2>
                         <p class="text-gray-500 mb-6 text-center">Find the best Loan Provider for you, Adjust your amount, interest rate and time period in filters</p>
                     </div>
+                    {userdetails.isAuthorized ? "" : (
+
+
+                        <div id='premium' class="w-full  p-2 bg-white border border-gray-200 rounded-lg mx-auto shadow flex flex-col ">
+                            <div class=" p-6 bg-white border border-gray-200 rounded-lg shadow mx-auto">
+                                <div class="flex items-start">
+                                    <div>
+                                        <h1 class="mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900  ">
+                                            Premium subscribers with a <span class="text-green-600 ">verified </span>
+                                            account will get a green checkmark once approved...
+                                        </h1>
+                                        <h2 class="mb-2 text-lg font-semibold text-gray-900 ">
+                                            Premium benefits:</h2>
+
+                                        <ul class="max-w-md space-y-1 text-gray-500 list-inside mb-4">
+                                            <li class="flex items-center">
+                                                <svg class="w-3.5 h-3.5 mr-2 text-green-500  flex-shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                </svg>
+                                                Trust and Credibility
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="w-3.5 h-3.5 mr-2 text-green-500  flex-shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                </svg>
+                                                Enhanced Security
+                                            </li>
+                                            <li class="flex items-center">
+                                                <svg class="w-3.5 h-3.5 mr-2 text-green-500  flex-shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                                                </svg>
+                                                Reduced Risk
+                                            </li>
+                                        </ul>
+
+
+
+
+
+                                        <a href="#" onClick={() => {
+                                            document.getElementById("form").style.display = "block"
+                                            document.getElementById("premium").style.display = "none"
+                                        }}
+                                            class="inline-flex mt-4 items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 ">
+                                            Continue
+                                            <svg class="w-3.5 h-3.5 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                            </svg>
+                                        </a>
+
+                                    </div>
+                                    <div class="">
+                                        <img src={img} alt="" class="" style={{ width: " 708px" }} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+
+                    }
+
+
+
 
 
                 </main>
@@ -229,19 +301,19 @@ const Dashboard = ({userdetails}) => {
                 {/* drawer component */}
                 <form action="#" method="get" id="drawer-example" style={{ height: '85vh' }} className="fixed top-0 right-0 z-40 mt-24 w-full mr-4  max-w-xs p-4    ">
 
-                    {user ? user.notifications.toReversed().map((notification,index) => {
-                        {/* const [isopen,setisopen]=useState(false); */}
+                    {user ? user.notifications.toReversed().map((notification, index) => {
+                        {/* const [isopen,setisopen]=useState(false); */ }
                         console.log(index)
                         return (
                             <div className='relative shadow-xl shadow shadow-red shadow-lg border-2 border-red-400 mb-3  px-2 py-3'>
                                 <button className='absolute w-6 h-6 rounded-full top-0 right-0 bg-red-500 text-white  top-0 right-0'>X</button>
-                                {notification[1] == "Active" ? <>{notification[0]} <a className='cursor-pointer' onClick={()=>{notificationshow(index)}}> Tap to see it</a>
-                               <div id={"N"+index} className='hidden'>
+                                {notification[1] == "Active" ? <>{notification[0]} <a className='cursor-pointer' onClick={() => { notificationshow(index) }}> Tap to see it</a>
+                                    <div id={"N" + index} className='hidden'>
 
-                               <Notification notification={notification}/>
-                               </div>
+                                        <Notification notification={notification} />
+                                    </div>
                                 </>
-                                 : ""}
+                                    : ""}
                             </div>
                         )
                     }) : ""}

@@ -4,6 +4,7 @@ import img from "../../CRY_p.17_illo.svg"
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom'
+import logo from "../../LogoSVG (1).svg"
 import {
     Input,
     Ripple,
@@ -13,6 +14,8 @@ import {
   initTE({ Input, Ripple });
 // import "./Login.scss"
 const Login = () => {
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     const history = useNavigate()
     const [email, setemail] = useState("")
     const [name, setname] = useState("")
@@ -45,7 +48,7 @@ const Login = () => {
     async function newsubmithandler(){
         if(newcpass===newpass){
             try {
-                await axios.post("http://localhost:4000/auth/register",{
+                await axios.post(`${URL}/auth/register`,{
                     email:newemail,mobile:mobile,password:newcpass,name:name
                 }).then((res)=>{
                     toast.success('created successfully please login now!');
@@ -100,7 +103,7 @@ const Login = () => {
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             ) && password.length > "7") {
 
-            await axios.post("http://localhost:4000/auth/login", {
+            await axios.post(`${URL}/auth/login`, {
                 email: email, password: password
             }).then((res) => {
 
@@ -152,7 +155,7 @@ const Login = () => {
             .match(
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             )) {
-            await axios.post("http://localhost:4000/auth/isvalidemail", {
+            await axios.post(`${URL}/auth/isvalidemail`, {
                 email: newemail
             }).then((res) => {
                 console.log(res.status)
@@ -258,8 +261,8 @@ const Login = () => {
                     <section>
                         <div id='signin' className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                             <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
-                                <img class="w-8 h-8 mr-2" src="" alt="logo" />
-                                logo
+                                <img class="w-48 mr-2" src={logo} alt="logo" />
+                                
                             </a>
 
                             <div class="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0 ">
@@ -319,8 +322,8 @@ const Login = () => {
                         <div id='signup' class="hidden flex flex-col items-center justify-center  py-8 mx-auto md:h-screen lg:py-0  ">
 
                             <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
-                                <img class="w-8 h-8 mr-2" src="" alt="logo" />
-                                logo
+                                <img class="w-48 mr-2" src={logo} alt="logo" />
+                                
                             </a>
 
 

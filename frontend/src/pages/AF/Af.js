@@ -4,9 +4,12 @@ import { Uploader } from "uploader";
 import { UploadButton } from "react-uploader";
 import { MdDelete } from "react-icons/md"
 import axios from 'axios';
+import {AiFillQuestionCircle} from "react-icons/ai"
+import {MdVerified} from "react-icons/md"
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  import logo from "../../LogoSVG (1).svg"
 const Af = ({user}) => {
     const [question, setquestion] = useState("");
     const [questions, setquestions] = useState([]);
@@ -23,6 +26,8 @@ const Af = ({user}) => {
     const history = useNavigate()
 
     async function submithandler() {
+        const URL="https://fine-backend.onrender.com"
+        // const URL="http://localhost:4000"
         if (fund == "") {
             alert("fill out Fund Needed")
 
@@ -44,25 +49,25 @@ const Af = ({user}) => {
             document.getElementById("percentage").focus();
             document.getElementById("percentage").classList.add("outline-red-500")
         }
-        else if (details.length < "200") {
-            alert("Fill atleast 200 letters")
+        else if (details.length < "100") {
+            alert("Fill atleast 100 letters")
             document.getElementById("details").focus();
             document.getElementById("details").classList.add("outline-red-500")
         }
-        else if (profit.length < "200") {
-            alert("Fill atleast 200 letters")
+        else if (profit.length < "100") {
+            alert("Fill atleast 100 letters")
             document.getElementById("profit").focus();
             document.getElementById("profit").classList.add("outline-red-500")
         }
-        else if (why.length < "200") {
-            alert("Fill atleast 200 letters")
+        else if (why.length < "100") {
+            alert("Fill atleast 100 letters")
             document.getElementById("why").focus();
             document.getElementById("why").classList.add("outline-red-500")
         }
         else {
             const token = document.cookie;
             try {
-                await axios.post("http://localhost:4000/transaction/af", {
+                await axios.post(`${URL}/transaction/af`, {
                    token, file, fund, percentage, why, details, questions, profit, category, name, location
                 }).then((res) => {
                     document.getElementById("success").style.display = "block"
@@ -87,6 +92,12 @@ const Af = ({user}) => {
     }
     function allclearhandler() {
         setquestions([]);
+        document.getElementById("sqc1").checked=false
+        document.getElementById("sqc2").checked=false
+        document.getElementById("sqc3").checked=false
+        document.getElementById("sq1").style.display="block";
+        document.getElementById("sq2").style.display="block";
+        document.getElementById("sq3").style.display="block";
     }
     async function logouthandler(){
         document.cookie =  "token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
@@ -112,8 +123,7 @@ const Af = ({user}) => {
                             </button>
                             {/* Logo */}
                             <a href className="flex items-center justify-between mr-4">
-                                <img src className="mr-3 h-8" alt=" Logo" />
-                                <span className="self-center text-2xl font-semibold whitespace-nowrap ">Fine</span>
+                                <img src={logo} className="mr-3 h-10" alt=" Logo" />
                             </a>
                         </div>
                     </div>
@@ -121,10 +131,12 @@ const Af = ({user}) => {
                 {/* Sidebar */}
                 <aside className="fixed top-0 left-0 z-40 w-64 rounded-lg mt-24 ml-5 mb-5 pt-4 pb-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 " id="drawer-navigation">
                     <div className="overflow-y-auto py-2 px-3 bg-white flex flex-col justify-between " style={{ height: "81vh" }} >
-                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200">
-                        <span>{user.isAuthenticated ? 
-                                <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> :
-                                <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
+                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200" title={user.isAuthorized ? "Verified Account" : "Unverified Account"}>
+                        <span>{user.isAuthorized ? (
+                            
+                                <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> 
+                        )
+                               : <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
                             }
                             </span>
                             <p className="pl-1 text-base font-medium text-gray-900">{user.name}
@@ -183,11 +195,12 @@ const Af = ({user}) => {
                                 </li>
                                 <li>
                                     <a href="../auth" className="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 ">
-                                        <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                        {/* <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
                                             <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-                                        </svg>
-                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Authentication</span>
+                                        </svg> */}
+                                        <MdVerified className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor"  size={15} />
+                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Get Verified</span>
                                     </a>
                                 </li>
                             </ul>
@@ -290,7 +303,7 @@ const Af = ({user}) => {
                                             </div>
                                                     {/* <input class="block w-full text-sm text-gray-900 cursor-pointer focus:outline-none " id="file" type="file" onChange={(e) => setfile(e.target.value)} /> */}
                                                 </div>
-                                                <div className='md:col-span-5 '>
+                                                <div className='md:col-span-5 bg-gray-100  p-3 rounded-md '>
                                                     <div className='flex justify-between align-center'>
                                                         <div>
 
@@ -304,8 +317,23 @@ const Af = ({user}) => {
                                                     <div className='flex mb-3 flex-col'>
 
                                                         {questions.map((value) => {
-                                                            return <div className=' flex text-lg align-center justify-between px-2 py-0  w-full '>* {value} </div>
+                                                            return <div className=' flex text-lg align-center  px-2 py-0  w-full gap-2'><AiFillQuestionCircle className='self-center'/> {value} </div>
                                                         })}
+                                                    </div>
+                                                    <div className='flex flex-col gap-2 '>
+                                                    <div className='text-lg font-medium'>Suggested questions</div>
+                                                            <div className='flex gap-2' id='sq1'><input type='checkbox' id='sqc1' class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={()=>{
+                                                                document.getElementById("sq1").style.display="none";
+                                                                setquestions([...questions, "Did you have prior experience as a Equity holder in any startup"]);
+                                                            }} ></input>Did you have prior experience as a Equity holder in any startup</div>
+                                                            <div className='flex gap-2' id='sq2'><input id='sqc2' type='checkbox' class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={()=>{
+                                                                document.getElementById("sq2").style.display="none";
+                                                                setquestions([...questions, "Will you be able to give time on weekends"]);
+                                                            }} ></input>Will you be able to give time on weekends</div>
+                                                            <div className='flex gap-2 ' id='sq3'><input id='sqc3' type='checkbox' class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" onClick={()=>{
+                                                                document.getElementById("sq3").style.display="none";
+                                                                setquestions([...questions, "What percentage of Growth you expect in an year"]);
+                                                            }} ></input>What percentage of Growth you expect in an year</div>
                                                     </div>
                                                     <div className='flex '>
                                                         <input type="text" onChange={(e) => { setquestion(e.target.value) }} name="questions" id="question" placeholder="i.e. What is Monthly savings" class="h-10 border mt-1 rounded px-4 w-full bg-gray-50" />

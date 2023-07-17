@@ -4,17 +4,21 @@ import { FaLocationDot } from "react-icons/fa6"
 import axios from "axios"
 import { Slider } from '@mui/material';
 import { useEffect } from 'react';
+import {MdVerified} from "react-icons/md"
 import Fund from '../../Components/Fund';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
+  import logo from "../../LogoSVG (1).svg"
 const Pf = ({user}) => {
+    const URL="https://fine-backend.onrender.com"
+    // const URL="http://localhost:4000"
     const history = useNavigate()
 
     const [funders, setfunders] = useState()
     async function getfunds() {
         try {
-            await axios.post("http://localhost:4000/transaction/allfunds").then((res) => {
+            await axios.post(`${URL}/transaction/allfunds`).then((res) => {
                 setfunders(res.data)
             }).catch((error) => {
                 alert(error)
@@ -55,8 +59,7 @@ const Pf = ({user}) => {
                             </button>
                             {/* Logo */}
                             <a href className="flex items-center justify-between mr-4">
-                                <img src className="mr-3 h-8" alt=" Logo" />
-                                <span className="self-center text-2xl font-semibold whitespace-nowrap ">Fine</span>
+                                <img src={logo} className="mr-3 h-10" alt=" Logo" />
                             </a>
                         </div>
                     </div>
@@ -64,8 +67,8 @@ const Pf = ({user}) => {
                 {/* Sidebar */}
                 <aside className="fixed top-0 left-0 z-40 w-64 rounded-lg mt-24 ml-5 mb-5 pt-4 pb-4 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 " id="drawer-navigation">
                     <div className="overflow-y-auto py-2 px-3 bg-white flex flex-col justify-between " style={{ height: "81vh" }} >
-                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200">
-                        <span>{user.isAuthenticated ? 
+                        <div> <div className="flex items-center lg:order-2 mb-8  border-2 rounded bg-gray-200" title={user.isAuthorized ? "Verified Account" : "Unverified Account"}>
+                        <span>{user.isAuthorized ? 
                                 <img className="w-8 h-8" src="https://img.icons8.com/cotton/64/check-male--v1.png" alt="check-male--v1" /> :
                                 <img className="w-8 h-8" src="https://img.icons8.com/pastel-glyph/64/person-male--v1.png" alt="person-male--v2" />
                             }
@@ -126,12 +129,10 @@ const Pf = ({user}) => {
                                 </li>
                                 <li>
                                     <a href="../auth" className="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 ">
-                                        <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                                            <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-                                        </svg>
-                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Authentication</span>
-                                    </a>
+                                   
+                                        <MdVerified className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75  group-hover:text-gray-900 " fill="currentColor"  size={15} />
+                                        <span className="flex-1 ml-3 text-left whitespace-nowrap">Get Verified</span>
+                                         </a>
                                 </li>
                             </ul>
                         </div>

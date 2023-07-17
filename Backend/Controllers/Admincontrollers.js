@@ -18,7 +18,9 @@ export const authreq = async(req,res)=>{
 }
 
 export const allauthreq = async(req,res)=>{
+    // console.log("ffd")
     try{
+        // res.status(200).json("")
         const reqs = await Auth.find({status:"Created"});
         const all =  await Auth.find({})
         const allusers =  await User.find({})
@@ -30,14 +32,15 @@ export const allauthreq = async(req,res)=>{
 }
 
 export const acceptreq = async(req,res)=>{
+    console.log(req.body.of)
     try {
         await User.findByIdAndUpdate(req.body.of,{
             isAuthorized:true
-        },{new:true})
+        })
         await Auth.findByIdAndUpdate(req.body.id,{
             status:"Accepted"
         })
-        console.log(req.body.of)
+        console.log(req.body.id)
         res.status(200).json("done")
     } catch (error) {
         res.status(400).json(error)
